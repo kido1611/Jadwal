@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Jadwal</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_jadwal">Jadwal</string>
+    <string name="nav_item_atur">Atur</string>
+    <string name="nav_item_arsip">Arsip</string>
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_jadwal</item>
+        <item>@string/nav_item_atur</item>
+        <item>@string/nav_item_arsip</item>
+    </string-array>
+
+</resources>
