@@ -6,11 +6,10 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -21,7 +20,8 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import id.kido1611.jadwal.fragment.MainActivityFragment;
+import id.kido1611.jadwal.fragment.AturSemesterFragment;
+import id.kido1611.jadwal.fragment.JadwalFragment;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -68,18 +68,32 @@ public class MainActivity extends AppCompatActivity{
         long identifier = item.getIdentifier();
         String title = ((Nameable)item).getName().getText(this);
 
-        getSupportActionBar().setTitle(title);
-
         if(identifier==1){
-            getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new MainActivityFragment(), title).commit();
+            openFragment(new JadwalFragment(), title);
+        }else if(identifier==2){
+            openFragment(new AturSemesterFragment(), getString(R.string.title_atur_semester));
+        }else if(identifier==3){
+            openFragment(AturSemesterFragment.newInstance(true), getString(R.string.title_arsip));
         }
         mDrawer.closeDrawer();
+    }
+
+    public void openFragment(Fragment fragment, String tag){
+        //getSupportActionBar().setTitle(tag);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment, tag).commit();
     }
 
     private Drawable getIconDrawable(int resId){
         Drawable drawable = getResources().getDrawable(resId);
         drawable.setColorFilter(new PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY));
         return drawable;
+    }
+
+    public void showSnackBar(String message, int length, Snackbar.Callback callback, String actionTitle, View.OnClickListener clickListener){
+        Snackbar.make(coordinatorLayout, message, length)
+                .setAction(actionTitle, clickListener)
+                .setCallback(callback)
+                .show();
     }
 
 //    @Override

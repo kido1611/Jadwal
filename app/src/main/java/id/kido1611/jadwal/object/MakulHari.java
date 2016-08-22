@@ -1,0 +1,57 @@
+package id.kido1611.jadwal.object;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+/**
+ * Created by ahmad on 21/08/2016.
+ */
+public class MakulHari extends RealmObject {
+
+    @PrimaryKey
+    private String id;
+    private String makul_id;
+    private int jam_awal;
+    private int jam_akhir;
+    private String hari;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getMakul_id() {
+        return makul_id;
+    }
+
+    public void setMakul_id(String makul_id) {
+        this.makul_id = makul_id;
+    }
+
+    public int getJam_awal() {
+        return jam_awal;
+    }
+
+    public void setJam_awal(int jam_awal) {
+        this.jam_awal = jam_awal;
+    }
+
+    public int getJam_akhir() {
+        return jam_akhir;
+    }
+
+    public void setJam_akhir(int jam_akhir) {
+        this.jam_akhir = jam_akhir;
+    }
+
+    public String getHari() {
+        return hari;
+    }
+
+    public void setHari(String hari) {
+        this.hari = hari;
+    }
+}
