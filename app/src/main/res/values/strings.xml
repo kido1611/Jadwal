@@ -13,7 +13,6 @@
     <string name="nav_item_arsip">Arsip</string>
     <string name="nav_item_backup">Manajemen Data</string>
 
-
     <string name="hint_input_semester">Semester</string>
     <string name="hint_input_tahun_awal">Tahun awal</string>
     <string name="hint_input_tahun_akhir">Tahun akhir</string>
@@ -27,6 +26,10 @@
     <string name="button_arsip">Arsip</string>
     <string name="button_aktif">Set aktif</string>
     <string name="button_cancel_arsip">Batal arsip</string>
+
+    <string name="button_edit_semester">Ubah semester</string>
+    <string name="button_delete_semester">Hapus semester</string>
+    <string name="button_arsip_semester">Arsip semester</string>
 
     <string name="dialog_add_semester">Tambah semester</string>
     <string name="dialog_edit_semester">Ubah semester</string>
@@ -50,6 +53,11 @@
         <item>@string/button_cancel_arsip</item>
     </string-array>
 
+    <string-array name="arrays_atur_item_matakuliah">
+        <item>@string/button_edit</item>
+        <item>@string/button_delete</item>
+    </string-array>
+
     <string name="ask_set_aktif">Jadikan jadwal semester aktif?</string>
 
     <string name="success_add">Berhasil ditambah</string>
@@ -61,5 +69,7 @@
     <string name="failed_delete">Gagal menghapus</string>
     <string name="failed_arsip">Gagal membuat arsip</string>
     <string name="failed_aktif">Gagal membuat aktif</string>
+
+    <string name="error_zero_input">Tidak boleh kosong</string>
 </resources>
 

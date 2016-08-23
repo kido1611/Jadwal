@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -81,7 +82,13 @@ public class MainActivity extends AppCompatActivity{
 
     public void openFragment(Fragment fragment, String tag){
         //getSupportActionBar().setTitle(tag);
+        getSupportFragmentManager().popBackStack();
         getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment, tag).commit();
+    }
+
+    public void openFragmentWithStack(Fragment fragment, String tag){
+        String backStackName = fragment.getClass().getName();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(backStackName).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
     private Drawable getIconDrawable(int resId){

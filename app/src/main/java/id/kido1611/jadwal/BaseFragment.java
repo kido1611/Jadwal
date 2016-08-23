@@ -34,6 +34,9 @@ public abstract class BaseFragment extends Fragment {
     public void openFragment(Fragment fragment, String tag){
         ((MainActivity)getActivity()).openFragment(fragment, tag);
     }
+    public void openFragmentWithStack(Fragment fragment, String tag){
+        ((MainActivity)getActivity()).openFragmentWithStack(fragment, tag);
+    }
 
     public void showSnackBar(String message){
         showSnackBar(message, Snackbar.LENGTH_SHORT, null, null, null);
@@ -67,30 +70,6 @@ public abstract class BaseFragment extends Fragment {
     public int getSize(Class<? extends RealmObject> classSize){
         int size = getRealm().where(classSize).findAll().size();
         return size;
-    }
-
-    public void addData(RealmObject object) {
-        this.getRealm().beginTransaction();
-        this.getRealm().copyToRealm(object);
-        this.getRealm().commitTransaction();
-    }
-
-    public void addData(List<RealmObject> listObject) {
-        this.getRealm().beginTransaction();
-        this.getRealm().copyToRealm(listObject);
-        this.getRealm().commitTransaction();
-    }
-
-    public void deleteData(Class<? extends RealmObject> cls, String id) {
-        this.getRealm().beginTransaction();
-        this.getRealm().where(cls.asSubclass(RealmObject.class)).equalTo("id", id).findAll().deleteAllFromRealm();
-        this.getRealm().commitTransaction();
-    }
-
-    public void updateData(RealmObject object){
-        this.getRealm().beginTransaction();
-        this.getRealm().copyToRealmOrUpdate(object);
-        this.getRealm().commitTransaction();
     }
 
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="1"
+        android:title="@string/button_edit_semester"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="1"
+        android:title="@string/button_delete_semester"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_archieve"
+        android:orderInCategory="1"
+        android:title="@string/button_arsip_semester"
+        app:showAsAction="never" />
+</menu>

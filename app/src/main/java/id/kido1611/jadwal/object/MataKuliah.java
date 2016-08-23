@@ -13,7 +13,6 @@ public class MataKuliah extends RealmObject {
     private String id;
     private String semester_id;
     private String nama;
-    private String nilai;
     private RealmList<MakulHari> listHari;
 
     public String getId() {
@@ -38,14 +37,6 @@ public class MataKuliah extends RealmObject {
 
     public void setNama(String nama) {
         this.nama = nama;
-    }
-
-    public String getNilai() {
-        return nilai;
-    }
-
-    public void setNilai(String nilai) {
-        this.nilai = nilai;
     }
 
     public RealmList<MakulHari> getListHari() {

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.kido1611.jadwal.BaseFragment;
 import id.kido1611.jadwal.R;
+import id.kido1611.jadwal.model.EditTextWatcher;
 import id.kido1611.jadwal.model.SemesterRecyclerAdapter;
 import id.kido1611.jadwal.object.Semester;
 import io.realm.Realm;
@@ -55,18 +57,30 @@ public class AturSemesterFragment extends BaseFragment
 
     private boolean isArsip = false;
 
+    private TextInputEditText mEditSemester, mEditTahunAwal, mEditTahunAkhir, mEditKeterangan;
+    private TextInputLayout mInputLayoutSemester, mInputLayoutTahunAwal, mInputLayoutTahunAkhir, mInputLayoutKeterangan;
+    private CheckBox mCheckBoxAktif;
+
     @OnClick(R.id.fab_add)
     public void fab_click(){
-        new MaterialDialog.Builder(getActivity())
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.dialog_add_semester)
                 .positiveText(R.string.button_add)
                 .neutralText(R.string.button_close)
                 .customView(R.layout.dialog_ubah_semester, true)
+                .autoDismiss(false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        View dialogView = dialog.getCustomView();
-                        addSemester(dialogView);
+                        View view = dialog.getCustomView();
+                        mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
+                        mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
+                        mEditTahunAkhir = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_akhir);
+                        if(mEditSemester.getText().length()==0) return;
+                        if(mEditTahunAwal.getText().length()==0) return;
+                        if(mEditTahunAkhir.getText().length()==0) return;
+                        addSemester(view);
+                        dialog.dismiss();
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -75,7 +89,24 @@ public class AturSemesterFragment extends BaseFragment
                         dialog.dismiss();
                     }
                 })
-                .show();
+                .build();
+        View view = dialog.getCustomView();
+        mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
+        mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
+        mEditTahunAkhir = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_akhir);
+        mEditKeterangan = (TextInputEditText) view.findViewById(R.id.text_input_edit_keterangan);
+        mInputLayoutSemester = (TextInputLayout) view.findViewById(R.id.text_input_layout_semester);
+        mInputLayoutTahunAwal = (TextInputLayout) view.findViewById(R.id.text_input_layout_tahun_awal);
+        mInputLayoutTahunAkhir = (TextInputLayout) view.findViewById(R.id.text_input_layout_tahun_akhir);
+        mInputLayoutKeterangan = (TextInputLayout) view.findViewById(R.id.text_input_layout_keterangan);
+
+        String error_zero = getString(R.string.error_zero_input);
+        mEditSemester.addTextChangedListener(new EditTextWatcher(mInputLayoutSemester, error_zero));
+        mEditTahunAwal.addTextChangedListener(new EditTextWatcher(mInputLayoutTahunAwal, error_zero));
+        mEditTahunAkhir.addTextChangedListener(new EditTextWatcher(mInputLayoutTahunAkhir, error_zero));
+
+        dialog.show();
+
     }
 
     public RealmResults<Semester> getSemester(){
@@ -128,8 +159,6 @@ public class AturSemesterFragment extends BaseFragment
     }
 
     private void addSemester(View view){
-        TextInputEditText mEditSemester, mEditTahunAwal, mEditTahunAkhir, mEditKeterangan;
-        CheckBox mCheckBoxAktif;
 
         mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
         mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
@@ -164,7 +193,7 @@ public class AturSemesterFragment extends BaseFragment
 
     @Override
     public void onClickListener(int position, Semester item) {
-        openFragment(AturMatakuliahFragment.newInstance(Long.parseLong(item.getId())), "MataKuliahFragment");
+        openFragmentWithStack(AturMatakuliahFragment.newInstance(Long.parseLong(item.getId())), "MataKuliahFragment");
     }
 
     @Override
@@ -280,11 +309,19 @@ public class AturSemesterFragment extends BaseFragment
                 .positiveText(R.string.button_edit)
                 .neutralText(R.string.button_close)
                 .customView(R.layout.dialog_ubah_semester, true)
+                .autoDismiss(false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        View dialogView = dialog.getCustomView();
-                        editSemester(item, dialogView);
+                        View view = dialog.getCustomView();
+                        mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
+                        mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
+                        mEditTahunAkhir = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_akhir);
+                        if(mEditSemester.getText().length()==0) return;
+                        if(mEditTahunAwal.getText().length()==0) return;
+                        if(mEditTahunAkhir.getText().length()==0) return;
+                        editSemester(item, view);
+                        dialog.dismiss();
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -297,14 +334,21 @@ public class AturSemesterFragment extends BaseFragment
         MaterialDialog dialog = mBuilder.build();
         View view = dialog.getCustomView();
 
-        TextInputEditText mEditSemester, mEditTahunAwal, mEditTahunAkhir, mEditKeterangan;
-        CheckBox mCheckBoxAktif;
-
         mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
         mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
         mEditTahunAkhir = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_akhir);
         mEditKeterangan = (TextInputEditText) view.findViewById(R.id.text_input_edit_keterangan);
         mCheckBoxAktif = (CheckBox) view.findViewById(R.id.checkbox_aktif);
+
+        mInputLayoutSemester = (TextInputLayout) view.findViewById(R.id.text_input_layout_semester);
+        mInputLayoutTahunAwal = (TextInputLayout) view.findViewById(R.id.text_input_layout_tahun_awal);
+        mInputLayoutTahunAkhir = (TextInputLayout) view.findViewById(R.id.text_input_layout_tahun_akhir);
+        mInputLayoutKeterangan = (TextInputLayout) view.findViewById(R.id.text_input_layout_keterangan);
+
+        String error_zero = getString(R.string.error_zero_input);
+        mEditSemester.addTextChangedListener(new EditTextWatcher(mInputLayoutSemester, error_zero));
+        mEditTahunAwal.addTextChangedListener(new EditTextWatcher(mInputLayoutTahunAwal, error_zero));
+        mEditTahunAkhir.addTextChangedListener(new EditTextWatcher(mInputLayoutTahunAkhir, error_zero));
 
         mEditSemester.setText(item.getSemester());
         mEditTahunAwal.setText(item.getTahun_awal());

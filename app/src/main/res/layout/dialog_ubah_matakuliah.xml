@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_input_edit_nama"
             android:hint="@string/hint_input_mata_kuliah"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
             android:inputType="textCapSentences"/>
     </android.support.design.widget.TextInputLayout>
 </RelativeLayout>
