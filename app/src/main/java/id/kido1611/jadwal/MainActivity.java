@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity{
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName(R.string.nav_item_jadwal).withIcon(getIconDrawable(R.drawable.ic_list)),
                         new PrimaryDrawerItem().withIdentifier(2).withName(R.string.nav_item_atur).withIcon(getIconDrawable(R.drawable.ic_settings)),
-                        new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_arsip).withIcon(getIconDrawable(R.drawable.ic_archive))
+                        new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_arsip).withIcon(getIconDrawable(R.drawable.ic_archive)),
+                        new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_backup).withIcon(getIconDrawable(R.drawable.ic_backup))
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override

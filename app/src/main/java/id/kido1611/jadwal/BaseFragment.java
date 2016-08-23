@@ -22,6 +22,12 @@ public abstract class BaseFragment extends Fragment {
     public static final String EXTRA_ID = "id";
 
     public void setAppTitle(String title){
+        if(title==null) return;
+
+        if((MainActivity)getActivity()==null) return;
+
+        if(((MainActivity)getActivity()).getSupportActionBar()==null) return;
+
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(title);
     }
 

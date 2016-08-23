@@ -48,7 +48,7 @@ public class SemesterRecyclerAdapter extends RealmRecyclerViewAdapter<Semester, 
     public void onBindViewHolder(SemesterViewHolder holder, final int position) {
         final Semester item = getData().get(position);
         holder.mTextTitle.setText("Semester: "+item.getSemester()+" ("+item.getTahun_awal()+"/"+item.getTahun_akhir()+")");
-        holder.mTextKeterangan.setText(item.getKeterangan());
+        holder.mTextKeterangan.setText((item.isAktif()?"(Aktif)":"")+item.getKeterangan());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

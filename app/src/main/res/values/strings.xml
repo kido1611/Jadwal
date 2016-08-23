@@ -4,17 +4,21 @@
     <string name="title_atur_matakuliah">Atur matakuliah</string>
     <string name="title_atur_hari">Atur hari</string>
     <string name="title_arsip">Arsip semester</string>
+    <string name="title_edit">Ubah</string>
 
     <string name="action_settings">Settings</string>
 
     <string name="nav_item_jadwal">Jadwal</string>
     <string name="nav_item_atur">Atur</string>
     <string name="nav_item_arsip">Arsip</string>
+    <string name="nav_item_backup">Manajemen Data</string>
+
 
     <string name="hint_input_semester">Semester</string>
     <string name="hint_input_tahun_awal">Tahun awal</string>
     <string name="hint_input_tahun_akhir">Tahun akhir</string>
     <string name="hint_input_keterangan">Keterangan</string>
+    <string name="hint_input_mata_kuliah">Pelajaran/Matakuliah</string>
 
     <string name="button_add">Tambah</string>
     <string name="button_edit">Ubah</string>
@@ -22,9 +26,12 @@
     <string name="button_delete">Hapus</string>
     <string name="button_arsip">Arsip</string>
     <string name="button_aktif">Set aktif</string>
+    <string name="button_cancel_arsip">Batal arsip</string>
 
     <string name="dialog_add_semester">Tambah semester</string>
     <string name="dialog_edit_semester">Ubah semester</string>
+    <string name="dialog_add_matakuliah">Tambah matakuliah</string>
+    <string name="dialog_edit_matakuliah">Ubah matakuliah</string>
 
     <string-array name="arrays_atur_item">
         <item>@string/button_edit</item>
@@ -37,11 +44,22 @@
         <item>@string/button_arsip</item>
         <item>@string/button_aktif</item>
     </string-array>
+    <string-array name="arrays_arsip_item">
+        <item>@string/button_edit</item>
+        <item>@string/button_delete</item>
+        <item>@string/button_cancel_arsip</item>
+    </string-array>
 
     <string name="ask_set_aktif">Jadikan jadwal semester aktif?</string>
 
     <string name="success_add">Berhasil ditambah</string>
     <string name="success_delete">Berhasil dihapus</string>
     <string name="success_edit">Berhasil diubah</string>
-    <string name="success_arsip">Berhasil diarsip</string>
+    <string name="success_arsip">Berhasil membuat arsip</string>
+    <string name="success_aktif">Berhasil membuat aktif</string>
+
+    <string name="failed_delete">Gagal menghapus</string>
+    <string name="failed_arsip">Gagal membuat arsip</string>
+    <string name="failed_aktif">Gagal membuat aktif</string>
 </resources>
+

@@ -24,6 +24,7 @@ import id.kido1611.jadwal.BaseFragment;
 import id.kido1611.jadwal.R;
 import id.kido1611.jadwal.model.SemesterRecyclerAdapter;
 import id.kido1611.jadwal.object.Semester;
+import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -78,7 +79,8 @@ public class AturSemesterFragment extends BaseFragment
     }
 
     public RealmResults<Semester> getSemester(){
-        RealmResults<Semester> results = getRealm().where(Semester.class).equalTo("arsip", isArsip).findAllSortedAsync("id", Sort.DESCENDING);
+//        RealmResults<Semester> results = getRealm().where(Semester.class).equalTo("arsip", isArsip).findAllSortedAsync("tahun_awal", Sort.DESCENDING, "semester", Sort.DESCENDING);
+        RealmResults<Semester> results = getRealm().where(Semester.class).equalTo("arsip", isArsip).findAllSortedAsync(new String[]{"aktif", "tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING});
         return results;
     }
 
@@ -98,7 +100,6 @@ public class AturSemesterFragment extends BaseFragment
         if(getArguments()!=null)
             isArsip = getArguments().getBoolean("arsip");
 
-        setAppTitle(getString(isArsip?R.string.title_arsip:R.string.title_atur_semester));
         loadData();
         mAdapter = new SemesterRecyclerAdapter(getActivity(), resultData, this);
     }
@@ -121,6 +122,8 @@ public class AturSemesterFragment extends BaseFragment
         mListView.setAdapter(mAdapter);
         mListView.setHasFixedSize(true);
 
+        setAppTitle(getString(isArsip?R.string.title_arsip:R.string.title_atur_semester));
+
         return rootView;
     }
 
@@ -134,7 +137,7 @@ public class AturSemesterFragment extends BaseFragment
         mEditKeterangan = (TextInputEditText) view.findViewById(R.id.text_input_edit_keterangan);
         mCheckBoxAktif = (CheckBox) view.findViewById(R.id.checkbox_aktif);
 
-        Semester semester = new Semester();
+        final Semester semester = new Semester();
         semester.setId(String.valueOf(System.currentTimeMillis()));
         semester.setArsip(false);
         semester.setAktif(mCheckBoxAktif.isChecked());
@@ -143,10 +146,20 @@ public class AturSemesterFragment extends BaseFragment
         semester.setTahun_awal(mEditTahunAwal.getText().toString());
         semester.setTahun_akhir(mEditTahunAkhir.getText().toString());
 
-        addData(semester);
-
-        mAdapter.notifyDataSetChanged();
-        showSnackBar(getString(R.string.success_add));
+        getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if(semester.isAktif()) {
+                    Semester itemAktif = realm.where(Semester.class).equalTo("aktif", true).findFirst();
+                    if (itemAktif != null) {
+                        itemAktif.setAktif(false);
+                    }
+                }
+                realm.copyToRealm(semester);
+                isContainAktif(realm);
+                showSnackBar(getString(R.string.success_add));
+            }
+        });
     }
 
     @Override
@@ -159,21 +172,66 @@ public class AturSemesterFragment extends BaseFragment
         new MaterialDialog.Builder(getActivity())
                 .title("Semester: "+item.getSemester())
                 .negativeText(R.string.button_close)
-                .items(item.isArsip()?R.array.arrays_atur_item:item.isAktif()?R.array.arrays_atur_item:R.array.arrays_atur_item_semester)
+                .items(item.isArsip()?R.array.arrays_arsip_item:item.isAktif()?R.array.arrays_atur_item:R.array.arrays_atur_item_semester)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                        if(position==1){
-                            deleteData(Semester.class, item.getId());
-                            showSnackBar(getString(R.string.success_delete));
+                        if(position==0){
+                            editSemesterDialog(item);
+                        }if(position==1){
+                            getRealm().executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    boolean itemAktif = item.isAktif();
+                                    realm.where(Semester.class).equalTo("id", item.getId()).findAll().deleteAllFromRealm();
+
+                                    if(itemAktif) {
+                                        RealmResults<Semester> lists = realm.where(Semester.class)
+                                                .equalTo("arsip", false)
+                                                .findAllSorted(new String[]{"aktif", "tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING});
+                                        if(lists.size() > 1){
+                                            Semester newAktif = lists.first();
+                                            if (newAktif != null) {
+                                                newAktif.setAktif(true);
+                                            }
+                                        }
+                                    }
+                                    showSnackBar(getString(R.string.success_delete));
+                                }
+                            });
                         }else if(position==2){
+                            getRealm().executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    item.setArsip(!item.isArsip());
+
+                                    if(item.isAktif()) {
+                                        item.setAktif(false);
+
+                                        RealmResults<Semester> lists = realm.where(Semester.class).equalTo("arsip", isArsip).findAllSorted(new String[]{"aktif", "tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING});
+                                        if(lists.size() > 0){
+                                            Semester newAktif = lists.first();
+                                            if (newAktif != null) {
+                                                newAktif.setAktif(true);
+                                            }
+                                        }
+                                    }
+                                    if(!item.isArsip()){
+                                        isContainAktif(realm);
+                                    }
+                                    showSnackBar(getString(R.string.success_arsip));
+                                }
+                            });
+                        }else if(position==3){
                             getRealm().beginTransaction();
-                            item.setArsip(true);
-                            item.setAktif(false);
+                            Semester itemAktif = getRealm().where(Semester.class).equalTo("aktif", true).findFirst();
+                            if(itemAktif!=null){
+                                itemAktif.setAktif(false);
+                            }
+                            item.setAktif(true);
                             getRealm().commitTransaction();
-                            showSnackBar(getString(R.string.success_arsip));
+                            showSnackBar(getString(R.string.success_aktif));
                         }
-                        //showSnackBar("pos: "+position+" "+text.toString());
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -183,5 +241,95 @@ public class AturSemesterFragment extends BaseFragment
                     }
                 })
                 .show();
+    }
+
+    private void editSemester(final Semester semester, View view){
+        TextInputEditText mEditSemester, mEditTahunAwal, mEditTahunAkhir, mEditKeterangan;
+        CheckBox mCheckBoxAktif;
+
+        mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
+        mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
+        mEditTahunAkhir = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_akhir);
+        mEditKeterangan = (TextInputEditText) view.findViewById(R.id.text_input_edit_keterangan);
+        mCheckBoxAktif = (CheckBox) view.findViewById(R.id.checkbox_aktif);
+
+        getRealm().beginTransaction();
+
+        if(!mCheckBoxAktif.isChecked()){
+            isContainAktif(getRealm());
+        }else{
+            Semester itemAktif = getRealm().where(Semester.class).equalTo("aktif", true).findFirst();
+            if (itemAktif != null) {
+                itemAktif.setAktif(false);
+            }
+        }
+        semester.setAktif(mCheckBoxAktif.isChecked());
+        semester.setKeterangan(mEditKeterangan.getText().toString());
+        semester.setSemester(mEditSemester.getText().toString());
+        semester.setTahun_awal(mEditTahunAwal.getText().toString());
+        semester.setTahun_akhir(mEditTahunAkhir.getText().toString());
+
+        getRealm().commitTransaction();
+
+        showSnackBar(getString(R.string.success_edit));
+
+    }
+    private void editSemesterDialog(final Semester item){
+        MaterialDialog.Builder mBuilder = new MaterialDialog.Builder(getActivity())
+                .title(getString(R.string.title_edit)+" Semester "+item.getSemester())
+                .positiveText(R.string.button_edit)
+                .neutralText(R.string.button_close)
+                .customView(R.layout.dialog_ubah_semester, true)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        View dialogView = dialog.getCustomView();
+                        editSemester(item, dialogView);
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        MaterialDialog dialog = mBuilder.build();
+        View view = dialog.getCustomView();
+
+        TextInputEditText mEditSemester, mEditTahunAwal, mEditTahunAkhir, mEditKeterangan;
+        CheckBox mCheckBoxAktif;
+
+        mEditSemester = (TextInputEditText) view.findViewById(R.id.text_input_edit_semester);
+        mEditTahunAwal = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_awal);
+        mEditTahunAkhir = (TextInputEditText) view.findViewById(R.id.text_input_edit_tahun_akhir);
+        mEditKeterangan = (TextInputEditText) view.findViewById(R.id.text_input_edit_keterangan);
+        mCheckBoxAktif = (CheckBox) view.findViewById(R.id.checkbox_aktif);
+
+        mEditSemester.setText(item.getSemester());
+        mEditTahunAwal.setText(item.getTahun_awal());
+        mEditTahunAkhir.setText(item.getTahun_akhir());
+        mEditKeterangan.setText(item.getKeterangan());
+        mCheckBoxAktif.setChecked(item.isAktif());
+
+        if(item.isArsip()) mCheckBoxAktif.setVisibility(View.GONE);
+
+        dialog.show();
+    }
+
+    private boolean isContainAktif(Realm realm){
+        boolean contain = false;
+
+        if(realm.where(Semester.class).equalTo("aktif", false).equalTo("arsip", false).findAll().size()==0){
+            RealmResults<Semester> lists = realm.where(Semester.class).equalTo("aktif", false).equalTo("arsip", false).findAllSorted(new String[]{"tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
+            if(lists.size() > 0){
+                Semester newAktif = lists.first();
+                if (newAktif != null) {
+                    newAktif.setAktif(true);
+                }
+            }
+        }
+
+        return contain;
     }
 }
