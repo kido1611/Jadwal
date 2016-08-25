@@ -73,16 +73,18 @@ public class MainActivity extends AppCompatActivity{
         if(identifier==1){
             openFragment(new JadwalFragment(), title);
         }else if(identifier==2){
-            openFragment(new AturSemesterFragment(), getString(R.string.title_atur_semester));
+            openFragment(AturSemesterFragment.newInstance(false, false), getString(R.string.title_atur_semester));
         }else if(identifier==3){
-            openFragment(AturSemesterFragment.newInstance(true), getString(R.string.title_arsip));
+            openFragment(AturSemesterFragment.newInstance(true, false), getString(R.string.title_arsip));
         }
         mDrawer.closeDrawer();
     }
 
     public void openFragment(Fragment fragment, String tag){
         //getSupportActionBar().setTitle(tag);
-        getSupportFragmentManager().popBackStack();
+        for(int i=0;i<getSupportFragmentManager().getBackStackEntryCount();i++) {
+            getSupportFragmentManager().popBackStack();
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment, tag).commit();
     }
 

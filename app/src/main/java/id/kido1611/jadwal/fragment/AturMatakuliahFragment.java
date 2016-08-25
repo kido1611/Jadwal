@@ -106,6 +106,7 @@ public class AturMatakuliahFragment extends BaseFragment
         getRealm().commitTransaction();
 
         showSnackBar(getString(R.string.success_add));
+        openFragmentWithStack(AturMatakuliahHariFragment.newInstance(makul.getId()), makul.getNama());
     }
 
     private Semester currentSemester = null;
@@ -116,7 +117,7 @@ public class AturMatakuliahFragment extends BaseFragment
         long id = getArguments().getLong(EXTRA_ID);
         currentSemester = getRealm().where(Semester.class).equalTo("id", String.valueOf(id)).findFirst();
         if(currentSemester==null){
-            openFragment(AturSemesterFragment.newInstance(false), getString(R.string.title_atur_semester));
+            openFragment(AturSemesterFragment.newInstance(false, false), getString(R.string.title_atur_semester));
         }
         setAppTitle("Semester "+currentSemester.getSemester());
 

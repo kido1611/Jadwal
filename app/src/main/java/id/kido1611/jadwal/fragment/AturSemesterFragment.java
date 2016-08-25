@@ -37,10 +37,17 @@ import io.realm.Sort;
 public class AturSemesterFragment extends BaseFragment
         implements SemesterRecyclerAdapter.SemesterItemListener{
 
-    public static AturSemesterFragment newInstance(boolean isArsip){
+    public static AturSemesterFragment newInstance(boolean isArsip, boolean newSemester){
         AturSemesterFragment fragment = new AturSemesterFragment();
         Bundle args = new Bundle();
         args.putBoolean("arsip", isArsip);
+        args.putBoolean("baru", newSemester);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static AturSemesterFragment newInstance(Bundle args){
+        AturSemesterFragment fragment = new AturSemesterFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -155,6 +162,8 @@ public class AturSemesterFragment extends BaseFragment
 
         setAppTitle(getString(isArsip?R.string.title_arsip:R.string.title_atur_semester));
 
+        if(getArguments().getBoolean("baru")) fab_click();
+
         return rootView;
     }
 
@@ -185,10 +194,23 @@ public class AturSemesterFragment extends BaseFragment
                     }
                 }
                 realm.copyToRealm(semester);
-                isContainAktif(realm);
                 showSnackBar(getString(R.string.success_add));
+                cekAktif(false);
             }
         });
+    }
+
+    private void cekAktif(boolean openTransaction){
+        if(openTransaction) getRealm().beginTransaction();
+
+        int count = getRealm().where(Semester.class).equalTo("arsip", false).equalTo("aktif", true).findAllSorted(new String[]{"aktif", "tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).size();
+        if(count!=0){
+            return;
+        }
+        Semester currentAktifSemester = getRealm().where(Semester.class).equalTo("arsip", false).equalTo("aktif", false).findAllSorted(new String[]{"aktif", "tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).first();
+        currentAktifSemester.setAktif(true);
+
+        if(openTransaction) getRealm().commitTransaction();
     }
 
     @Override
@@ -246,7 +268,7 @@ public class AturSemesterFragment extends BaseFragment
                                         }
                                     }
                                     if(!item.isArsip()){
-                                        isContainAktif(realm);
+                                        cekAktif(false);
                                     }
                                     showSnackBar(getString(R.string.success_arsip));
                                 }
@@ -285,7 +307,7 @@ public class AturSemesterFragment extends BaseFragment
         getRealm().beginTransaction();
 
         if(!mCheckBoxAktif.isChecked()){
-            isContainAktif(getRealm());
+            cekAktif(false);
         }else{
             Semester itemAktif = getRealm().where(Semester.class).equalTo("aktif", true).findFirst();
             if (itemAktif != null) {
@@ -359,21 +381,5 @@ public class AturSemesterFragment extends BaseFragment
         if(item.isArsip()) mCheckBoxAktif.setVisibility(View.GONE);
 
         dialog.show();
-    }
-
-    private boolean isContainAktif(Realm realm){
-        boolean contain = false;
-
-        if(realm.where(Semester.class).equalTo("aktif", false).equalTo("arsip", false).findAll().size()==0){
-            RealmResults<Semester> lists = realm.where(Semester.class).equalTo("aktif", false).equalTo("arsip", false).findAllSorted(new String[]{"tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
-            if(lists.size() > 0){
-                Semester newAktif = lists.first();
-                if (newAktif != null) {
-                    newAktif.setAktif(true);
-                }
-            }
-        }
-
-        return contain;
     }
 }

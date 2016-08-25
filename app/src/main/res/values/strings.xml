@@ -35,6 +35,8 @@
     <string name="dialog_edit_semester">Ubah semester</string>
     <string name="dialog_add_matakuliah">Tambah matakuliah</string>
     <string name="dialog_edit_matakuliah">Ubah matakuliah</string>
+    <string name="dialog_add_matakuliah_hari">Tambah hari</string>
+    <string name="diaog_edit_matakuliah_hari">Ubah hari</string>
 
     <string-array name="arrays_atur_item">
         <item>@string/button_edit</item>
@@ -71,5 +73,28 @@
     <string name="failed_aktif">Gagal membuat aktif</string>
 
     <string name="error_zero_input">Tidak boleh kosong</string>
+
+    <string name="spinner_prompt_hari">Pilih hari</string>
+    <string name="spinner_prompt_jam_awal">Dari jam</string>
+    <string name="spinner_prompt_jam_akhir">Sampai jam</string>
+
+    <string name="spinner_hari_senin">Senin</string>
+    <string name="spinner_hari_selasa">Selasa</string>
+    <string name="spinner_hari_rabu">Rabu</string>
+    <string name="spinner_hari_kamis">Kamis</string>
+    <string name="spinner_hari_jumat">Jumat</string>
+    <string name="spinner_hari_sabtu">Sabtu</string>
+    <string name="spinner_hari_minggu">Minggu</string>
+
+    <string-array name="spinner_hari_entry">
+        <item>@string/spinner_hari_senin</item>
+        <item>@string/spinner_hari_selasa</item>
+        <item>@string/spinner_hari_rabu</item>
+        <item>@string/spinner_hari_kamis</item>
+        <item>@string/spinner_hari_jumat</item>
+        <item>@string/spinner_hari_sabtu</item>
+        <item>@string/spinner_hari_minggu</item>
+    </string-array>
+
 </resources>
 

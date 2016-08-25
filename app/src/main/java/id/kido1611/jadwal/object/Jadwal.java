@@ -1,44 +1,21 @@
 package id.kido1611.jadwal.object;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
- * Created by ahmad on 21/08/2016.
+ * Created by ahmad on 25/08/2016.
  */
-public class MakulHari extends RealmObject {
-
-    @PrimaryKey
-    private String id;
-    private String semester_id;
-    private String makul_id;
+public class Jadwal {
+    private String makul;
     private int jam_awal;
     private int jam_akhir;
     private String hari;
     private String keterangan;
 
-    public String getId() {
-        return id;
+    public String getMakul() {
+        return makul;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSemester_id() {
-        return semester_id;
-    }
-
-    public void setSemester_id(String semester_id) {
-        this.semester_id = semester_id;
-    }
-
-    public String getMakul_id() {
-        return makul_id;
-    }
-
-    public void setMakul_id(String makul_id) {
-        this.makul_id = makul_id;
+    public void setMakul(String makul) {
+        this.makul = makul;
     }
 
     public int getJam_awal() {
@@ -72,5 +49,4 @@ public class MakulHari extends RealmObject {
     public void setKeterangan(String keterangan) {
         this.keterangan = keterangan;
     }
-
 }

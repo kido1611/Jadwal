@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_hari"
+        android:prompt="@string/spinner_prompt_hari"
+        android:entries="@array/spinner_hari_entry"></Spinner>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_jam"
+        android:layout_below="@id/spinner_hari"
+        android:orientation="horizontal">
+        <Spinner
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:id="@+id/spinner_jam_awal"
+            android:prompt="@string/spinner_prompt_jam_awal"></Spinner>
+        <Spinner
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:id="@+id/spinner_jam_akhir"
+            android:prompt="@string/spinner_prompt_jam_akhir"></Spinner>
+    </LinearLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@id/layout_jam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_input_layout_keterangan">
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="textMultiLine"
+            android:hint="@string/hint_input_keterangan"
+            android:id="@+id/text_input_edit_keterangan"/>
+    </android.support.design.widget.TextInputLayout>
+
+</RelativeLayout>
