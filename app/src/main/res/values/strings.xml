@@ -12,6 +12,7 @@
     <string name="nav_item_atur">Atur</string>
     <string name="nav_item_arsip">Arsip</string>
     <string name="nav_item_backup">Manajemen Data</string>
+    <string name="nav_item_note">Catatan</string>
 
     <string name="hint_input_semester">Semester</string>
     <string name="hint_input_tahun_awal">Tahun awal</string>
@@ -61,6 +62,7 @@
     </string-array>
 
     <string name="ask_set_aktif">Jadikan jadwal semester aktif?</string>
+    <string name="prompt_press_back_to_exit">Tekan tombol back sekali lagi untuk keluar</string>
 
     <string name="success_add">Berhasil ditambah</string>
     <string name="success_delete">Berhasil dihapus</string>

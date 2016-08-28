@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity{
                 .withTranslucentStatusBar(true)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withIdentifier(1).withName(R.string.nav_item_jadwal).withIcon(getIconDrawable(R.drawable.ic_list)),
+                        new PrimaryDrawerItem().withIdentifier(4).withName(R.string.nav_item_note).withIcon(getIconDrawable(R.drawable.ic_note)),
                         new PrimaryDrawerItem().withIdentifier(2).withName(R.string.nav_item_atur).withIcon(getIconDrawable(R.drawable.ic_settings)),
                         new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_arsip).withIcon(getIconDrawable(R.drawable.ic_archive)),
                         new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_backup).withIcon(getIconDrawable(R.drawable.ic_backup))
@@ -85,12 +86,13 @@ public class MainActivity extends AppCompatActivity{
         for(int i=0;i<getSupportFragmentManager().getBackStackEntryCount();i++) {
             getSupportFragmentManager().popBackStack();
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment, tag).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment, tag).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
     public void openFragmentWithStack(Fragment fragment, String tag){
         String backStackName = fragment.getClass().getName();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(backStackName).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment)
+                .addToBackStack(backStackName).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
     private Drawable getIconDrawable(int resId){
@@ -106,33 +108,26 @@ public class MainActivity extends AppCompatActivity{
                 .show();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    private static final int TIME_INTERVAL = 2000;
+    private long mBackPressed;
 
     @Override
     public void onBackPressed() {
         if(mDrawer.isDrawerOpen())
             mDrawer.closeDrawer();
-        else
-            super.onBackPressed();
+        else{
+            if(getSupportFragmentManager().getBackStackEntryCount()>0)
+                super.onBackPressed();
+            else{
+                if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()){
+                    super.onBackPressed();
+                    return;
+                }else{
+                    showSnackBar(getString(R.string.prompt_press_back_to_exit), Snackbar.LENGTH_LONG, null, null, null);
+                }
+            }
+        }
+
+        mBackPressed = System.currentTimeMillis();
     }
 }

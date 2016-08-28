@@ -188,7 +188,33 @@ public class AturMatakuliahHariFragment extends BaseFragment
     }
 
     @Override
-    public void onLongClickListener(int position, MakulHari item) {
-
+    public void onLongClickListener(int position, final MakulHari item) {
+        new MaterialDialog.Builder(getActivity())
+                .title("Matakuliah: "+currentMatakuliah.getNama())
+                .negativeText(R.string.button_close)
+                .items(R.array.arrays_atur_item_matakuliah)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        if(position==0) {
+                            //editMatakuliahDialog(item);
+                        }else if(position==1){
+                            getRealm().executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    realm.where(MakulHari.class).equalTo("id", item.getId()).findAll().deleteAllFromRealm();
+                                    showSnackBar(getString(R.string.success_delete));
+                                }
+                            });
+                        }
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

@@ -162,7 +162,7 @@ public class AturSemesterFragment extends BaseFragment
 
         setAppTitle(getString(isArsip?R.string.title_arsip:R.string.title_atur_semester));
 
-        if(getArguments().getBoolean("baru")) fab_click();
+        if(getArguments().getBoolean("baru") || (getRealm().where(Semester.class).equalTo("aktif", true).findAll().size()==0 && !isArsip)) fab_click();
 
         return rootView;
     }

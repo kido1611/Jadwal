@@ -46,7 +46,17 @@ public class JadwalRecyclerAdapter extends RealmRecyclerViewAdapter<MakulHari, J
     public void onBindViewHolder(HariViewHolder holder, final int position) {
         final MakulHari item = getData().get(position);
         MataKuliah makul = mRealm.where(MataKuliah.class).equalTo("id", item.getMakul_id()).findFirst();
-        holder.mTextTitle.setText((makul==null)?"Matakuliah tidak ada.":makul.getNama());
+
+        String title = null;
+        if(makul==null) title = "Matakuliah tidak ada";
+        else{
+            title = makul.getNama();
+            if(item.getKeterangan()!=null && !item.getKeterangan().isEmpty() && !item.getKeterangan().equals(" ") && !item.getKeterangan().equals(""))
+                title = title+" ("+item.getKeterangan()+")";
+        }
+
+
+        holder.mTextTitle.setText(title);
         holder.mTextKeterangan.setText(item.getJam_awal()+"-"+item.getJam_akhir());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

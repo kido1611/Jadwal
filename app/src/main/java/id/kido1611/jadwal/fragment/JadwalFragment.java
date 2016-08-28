@@ -39,7 +39,10 @@ public class JadwalFragment extends BaseFragment {
 
     @OnClick(R.id.fab_add)
     public void fab_click(){
-        openFragment(AturSemesterFragment.newInstance(false, true), getString(R.string.title_arsip));
+        if(currentAktifSemester==null)
+            openFragmentWithStack(AturSemesterFragment.newInstance(false, true), getString(R.string.title_atur_semester));
+        else
+            openFragmentWithStack(AturMatakuliahFragment.newInstance(Long.valueOf(currentAktifSemester.getId())), "MatakuliahFragment");
     }
 
     private ViewPagerAdapter mAdapter;
