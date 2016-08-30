@@ -57,7 +57,7 @@ public class JadwalRecyclerAdapter extends RealmRecyclerViewAdapter<MakulHari, J
 
 
         holder.mTextTitle.setText(title);
-        holder.mTextKeterangan.setText(item.getJam_awal()+"-"+item.getJam_akhir());
+        holder.mTextKeterangan.setText(item.getJam_awal()+"-"+item.getJam_akhir()+", "+item.getKelas());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

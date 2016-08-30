@@ -23,9 +23,9 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         RealmConfiguration config = new RealmConfiguration.Builder(this)
-                .deleteRealmIfMigrationNeeded()
-                //.migration(new DataMigration())
-                .schemaVersion(1)
+                //.deleteRealmIfMigrationNeeded()
+                .migration(new DataMigration())
+                .schemaVersion(2)
                 .build();
         Realm.setDefaultConfiguration(config);
 
@@ -44,6 +44,12 @@ public class BaseApplication extends Application {
                         .addField("note", String.class)
                         .addField("date", Long.class)
                         .setNullable("date", true);
+
+                oldVersion++;
+            }
+            if(oldVersion==1){
+                RealmObjectSchema hari = schema.get("MakulHari");
+                hari.addField("kelas", String.class);
 
                 oldVersion++;
             }

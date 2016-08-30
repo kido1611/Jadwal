@@ -58,19 +58,18 @@ public class AturMatakuliahFragment extends BaseFragment
 
     @OnClick(R.id.fab_add)
     public void fab_add(){
+        initDialogView();
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                 .title(R.string.dialog_add_matakuliah)
-                .customView(R.layout.dialog_ubah_matakuliah, true)
+                .customView(dialogView, true)
                 .positiveText(R.string.button_add)
                 .negativeText(R.string.button_close)
                 .autoDismiss(false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        View dialogView = dialog.getCustomView();
-                        mEditNama = (TextInputEditText) dialogView.findViewById(R.id.text_input_edit_nama);
                         if(mEditNama.getText().length()>0) {
-                            addMatakuliah(dialog.getCustomView());
+                            addMatakuliah();
                             dialog.dismiss();
                         }
                     }
@@ -82,19 +81,29 @@ public class AturMatakuliahFragment extends BaseFragment
                     }
                 });
 
-        View view = builder.build().getCustomView();
-        mEditNama = (TextInputEditText) view.findViewById(R.id.text_input_edit_nama);
-        mInputLayoutNama = (TextInputLayout) view.findViewById(R.id.text_input_layout_nama);
-        mEditNama.addTextChangedListener(new EditTextWatcher(mInputLayoutNama, getString(R.string.error_zero_input)));
-
         builder.build().show();
     }
 
-    TextInputEditText mEditNama;
-    TextInputLayout mInputLayoutNama;
+    private TextInputEditText mEditNama;
+    private TextInputLayout mInputLayoutNama;
+    private View dialogView;
 
-    private void addMatakuliah(View view){
-        mEditNama = (TextInputEditText) view.findViewById(R.id.text_input_edit_nama);
+    private void initDialogView(){
+        if(dialogView!=null){
+            mEditNama.setText("");
+            return;
+        }
+        dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_ubah_matakuliah, null, false);
+
+        mEditNama = (TextInputEditText) dialogView.findViewById(R.id.text_input_edit_nama);
+        mInputLayoutNama = (TextInputLayout) dialogView.findViewById(R.id.text_input_layout_nama);
+        mEditNama.addTextChangedListener(new EditTextWatcher(mInputLayoutNama, getString(R.string.error_zero_input)));
+
+        mEditNama.setText("");
+
+    }
+
+    private void addMatakuliah(){
 
         MataKuliah makul = new MataKuliah();
         makul.setId(String.valueOf(System.currentTimeMillis()));
@@ -144,6 +153,9 @@ public class AturMatakuliahFragment extends BaseFragment
         mRecyclerView.setHasFixedSize(true);
 
         setAppTitle("Semester "+currentSemester.getSemester());
+
+        if(currentSemester.getMatakuliahList().size()==0)
+            fab_add();
 
         return rootView;
     }
@@ -218,9 +230,7 @@ public class AturMatakuliahFragment extends BaseFragment
         return super.onOptionsItemSelected(item);
     }
 
-    private void editMatakuliah(MataKuliah item, View view){
-        mEditNama = (TextInputEditText) view.findViewById(R.id.text_input_edit_nama);
-
+    private void editMatakuliah(MataKuliah item){
         getRealm().beginTransaction();
         item.setNama(mEditNama.getText().toString());
         getRealm().commitTransaction();
@@ -228,19 +238,18 @@ public class AturMatakuliahFragment extends BaseFragment
         showSnackBar(getString(R.string.success_edit));
     }
     private void editMatakuliahDialog(final MataKuliah item){
+        initDialogView();
         MaterialDialog.Builder mBuilder = new MaterialDialog.Builder(getActivity())
                 .title(getString(R.string.title_edit)+" matakuliah "+item.getNama())
                 .positiveText(R.string.button_edit)
                 .neutralText(R.string.button_close)
-                .customView(R.layout.dialog_ubah_matakuliah, true)
+                .customView(dialogView, true)
                 .autoDismiss(false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        View dialogView = dialog.getCustomView();
-                        mEditNama = (TextInputEditText) dialogView.findViewById(R.id.text_input_edit_nama);
                         if(mEditNama.getText().length()>0) {
-                            editMatakuliah(item, dialogView);
+                            editMatakuliah(item);
                             dialog.dismiss();
                         }
                     }
@@ -253,11 +262,7 @@ public class AturMatakuliahFragment extends BaseFragment
                 });
 
         MaterialDialog dialog = mBuilder.build();
-        View view = dialog.getCustomView();
 
-        mEditNama = (TextInputEditText) view.findViewById(R.id.text_input_edit_nama);
-        mInputLayoutNama = (TextInputLayout) view.findViewById(R.id.text_input_layout_nama);
-        mEditNama.addTextChangedListener(new EditTextWatcher(mInputLayoutNama, getString(R.string.error_zero_input)));
         mEditNama.setText(item.getNama());
 
         dialog.show();

@@ -15,7 +15,9 @@ public class MakulHari extends RealmObject {
     private int jam_awal;
     private int jam_akhir;
     private String hari;
+    private String kelas;
     private String keterangan;
+
 
     public String getId() {
         return id;
@@ -73,4 +75,11 @@ public class MakulHari extends RealmObject {
         this.keterangan = keterangan;
     }
 
+    public String getKelas() {
+        return kelas;
+    }
+
+    public void setKelas(String kelas) {
+        this.kelas = kelas;
+    }
 }

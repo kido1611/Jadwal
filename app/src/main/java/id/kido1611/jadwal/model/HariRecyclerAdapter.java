@@ -42,7 +42,7 @@ public class HariRecyclerAdapter extends RealmRecyclerViewAdapter<MakulHari, Har
     @Override
     public void onBindViewHolder(HariViewHolder holder, final int position) {
         final MakulHari item = getData().get(position);
-        holder.mTextTitle.setText(item.getHari()+" "+item.getJam_awal()+"-"+item.getJam_akhir());
+        holder.mTextTitle.setText(item.getHari()+", "+item.getJam_awal()+"-"+item.getJam_akhir()+", "+item.getKelas());
         holder.mTextKeterangan.setText(item.getKeterangan());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

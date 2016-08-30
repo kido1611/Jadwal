@@ -19,6 +19,7 @@
     <string name="hint_input_tahun_akhir">Tahun akhir</string>
     <string name="hint_input_keterangan">Keterangan</string>
     <string name="hint_input_mata_kuliah">Pelajaran/Matakuliah</string>
+    <string name="hint_input_tempat">Tempat</string>
 
     <string name="button_add">Tambah</string>
     <string name="button_edit">Ubah</string>
