@@ -28,6 +28,8 @@
     <string name="button_arsip">Arsip</string>
     <string name="button_aktif">Set aktif</string>
     <string name="button_cancel_arsip">Batal arsip</string>
+    <string name="button_backup_db">Backup database</string>
+    <string name="button_Restore_db">Restore database</string>
 
     <string name="button_edit_semester">Ubah semester</string>
     <string name="button_delete_semester">Hapus semester</string>
@@ -38,7 +40,7 @@
     <string name="dialog_add_matakuliah">Tambah matakuliah</string>
     <string name="dialog_edit_matakuliah">Ubah matakuliah</string>
     <string name="dialog_add_matakuliah_hari">Tambah hari</string>
-    <string name="diaog_edit_matakuliah_hari">Ubah hari</string>
+    <string name="dialog_edit_matakuliah_hari">Ubah hari</string>
 
     <string-array name="arrays_atur_item">
         <item>@string/button_edit</item>

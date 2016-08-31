@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.kido1611.jadwal.BaseFragment;
+import id.kido1611.jadwal.MainActivity;
 import id.kido1611.jadwal.R;
 import id.kido1611.jadwal.object.Semester;
 import io.realm.RealmResults;
@@ -55,7 +56,8 @@ public class JadwalFragment extends BaseFragment {
         RealmResults<Semester> listAll =getRealm().where(Semester.class).equalTo("arsip", false).equalTo("aktif", true).findAllSorted(new String[]{"aktif", "tahun_awal", "semester"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING});
 
         if(listAll.size()==0){
-            openFragment(AturSemesterFragment.newInstance(false, true), getString(R.string.title_arsip));
+            ((MainActivity)getActivity()).openDrawerSelection(2);
+            //openFragment(AturSemesterFragment.newInstance(false, true), getString(R.string.title_arsip));
         }else
             currentAktifSemester = listAll.first();
 

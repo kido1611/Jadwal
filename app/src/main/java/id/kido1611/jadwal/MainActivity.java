@@ -23,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.kido1611.jadwal.fragment.AturSemesterFragment;
 import id.kido1611.jadwal.fragment.JadwalFragment;
+import id.kido1611.jadwal.fragment.ManageDbFragment;
+import id.kido1611.jadwal.fragment.NoteFragment;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity{
                         new PrimaryDrawerItem().withIdentifier(4).withName(R.string.nav_item_note).withIcon(getIconDrawable(R.drawable.ic_note)),
                         new PrimaryDrawerItem().withIdentifier(2).withName(R.string.nav_item_atur).withIcon(getIconDrawable(R.drawable.ic_settings)),
                         new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_arsip).withIcon(getIconDrawable(R.drawable.ic_archive)),
-                        new PrimaryDrawerItem().withIdentifier(3).withName(R.string.nav_item_backup).withIcon(getIconDrawable(R.drawable.ic_backup))
+                        new PrimaryDrawerItem().withIdentifier(5).withName(R.string.nav_item_backup).withIcon(getIconDrawable(R.drawable.ic_backup))
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -67,6 +69,10 @@ public class MainActivity extends AppCompatActivity{
         mDrawer.setSelection(1, true);
     }
 
+    public void openDrawerSelection(int identidier){
+        mDrawer.setSelection(identidier, true);
+    }
+
     private void openDisplay(IDrawerItem item){
         long identifier = item.getIdentifier();
         String title = ((Nameable)item).getName().getText(this);
@@ -77,6 +83,10 @@ public class MainActivity extends AppCompatActivity{
             openFragment(AturSemesterFragment.newInstance(false, false), getString(R.string.title_atur_semester));
         }else if(identifier==3){
             openFragment(AturSemesterFragment.newInstance(true, false), getString(R.string.title_arsip));
+        }else if(identifier==5){
+            openFragment(new ManageDbFragment(), getString(R.string.nav_item_backup));
+        }else if(identifier==4){
+            openFragment(new NoteFragment(), getString(R.string.nav_item_note));
         }
         mDrawer.closeDrawer();
     }

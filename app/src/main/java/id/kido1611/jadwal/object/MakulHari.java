@@ -1,5 +1,6 @@
 package id.kido1611.jadwal.object;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -17,6 +18,7 @@ public class MakulHari extends RealmObject {
     private String hari;
     private String kelas;
     private String keterangan;
+    private RealmList<Note> listNote;
 
 
     public String getId() {
@@ -81,5 +83,13 @@ public class MakulHari extends RealmObject {
 
     public void setKelas(String kelas) {
         this.kelas = kelas;
+    }
+
+    public RealmList<Note> getListNote() {
+        return listNote;
+    }
+
+    public void setListNote(RealmList<Note> listNote) {
+        this.listNote = listNote;
     }
 }

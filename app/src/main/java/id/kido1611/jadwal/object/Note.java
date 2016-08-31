@@ -8,18 +8,14 @@ import io.realm.annotations.PrimaryKey;
  */
 public class Note extends RealmObject {
     @PrimaryKey
-    private int id;
+    private String id;
     private String title;
     private String note;
-    private long date;
+    private long created_date;
+    private long last_edit;
+    private String makul_hari_id;
+    private boolean arsip;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -37,11 +33,43 @@ public class Note extends RealmObject {
         this.note = note;
     }
 
-    public long getDate() {
-        return date;
+    public String getId() {
+        return id;
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public long getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(long created_date) {
+        this.created_date = created_date;
+    }
+
+    public long getLast_edit() {
+        return last_edit;
+    }
+
+    public void setLast_edit(long last_edit) {
+        this.last_edit = last_edit;
+    }
+
+    public String getMakul_hari_id() {
+        return makul_hari_id;
+    }
+
+    public void setMakul_hari_id(String makul_hari_id) {
+        this.makul_hari_id = makul_hari_id;
+    }
+
+    public boolean isArsip() {
+        return arsip;
+    }
+
+    public void setArsip(boolean arsip) {
+        this.arsip = arsip;
     }
 }

@@ -220,7 +220,7 @@ public class AturMatakuliahHariFragment extends BaseFragment
 
     @Override
     public void onClickListener(int position, MakulHari item) {
-
+        editMatakuliahHariDialog(item);
     }
 
     private void editHari(MakulHari itemHari){
@@ -239,8 +239,8 @@ public class AturMatakuliahHariFragment extends BaseFragment
     private void editMatakuliahHariDialog(final MakulHari itemHari){
         initDialogView();
         final MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                .title(R.string.dialog_add_matakuliah_hari)
-                .positiveText(R.string.button_add)
+                .title(R.string.dialog_edit_matakuliah_hari)
+                .positiveText(R.string.button_edit)
                 .negativeText(R.string.button_close)
                 .customView(dialogView, true)
                 .autoDismiss(false)
