@@ -26,7 +26,7 @@ public class BaseApplication extends Application {
         RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .deleteRealmIfMigrationNeeded()
                 .migration(new DataMigration())
-                .schemaVersion(4)
+                .schemaVersion(5)
                 .build();
         Realm.setDefaultConfiguration(config);
 
@@ -58,7 +58,8 @@ public class BaseApplication extends Application {
                 RealmObjectSchema hari = schema.get("MakulHari");
                 hari.addRealmListField("listNote", schema.get("Note"));
                 oldVersion++;
-            }if(oldVersion==3){
+            }
+            if(oldVersion==3){
                 RealmObjectSchema note = schema.get("Note");
                 note.addField("makul_hari_id", String.class);
                 note.addField("arsip", Boolean.class);
@@ -74,6 +75,11 @@ public class BaseApplication extends Application {
                 })
                         .removeField("id")
                         .renameField("temp_id", "id");
+                oldVersion++;
+            }
+            if(oldVersion==4){
+                RealmObjectSchema note = schema.get("Note");
+                note.renameField("makul_hari_id", "makul_id");
                 oldVersion++;
             }
         }

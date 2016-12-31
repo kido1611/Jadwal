@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity{
         }else if(identifier==5){
             openFragment(new ManageDbFragment(), getString(R.string.nav_item_backup));
         }else if(identifier==4){
-            openFragment(new NoteFragment(), getString(R.string.nav_item_note));
+            openFragment(NoteFragment.newInstance(""), getString(R.string.nav_item_note));
         }
         mDrawer.closeDrawer();
     }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private static final int TIME_INTERVAL = 2000;
-    private long mBackPressed;
+    private long mBackPressed = 0;
 
     @Override
     public void onBackPressed() {
@@ -135,9 +135,8 @@ public class MainActivity extends AppCompatActivity{
                 }else{
                     showSnackBar(getString(R.string.prompt_press_back_to_exit), Snackbar.LENGTH_LONG, null, null, null);
                 }
+                mBackPressed = System.currentTimeMillis();
             }
         }
-
-        mBackPressed = System.currentTimeMillis();
     }
 }

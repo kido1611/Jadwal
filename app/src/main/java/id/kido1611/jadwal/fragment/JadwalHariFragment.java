@@ -72,7 +72,7 @@ public class JadwalHariFragment extends BaseFragment
 
     @Override
     public void onClickListener(int position, MakulHari item) {
-
+        openFragmentWithStack(NoteFragment.newInstance(item.getId()), getString(R.string.nav_item_note));
     }
 
     @Override

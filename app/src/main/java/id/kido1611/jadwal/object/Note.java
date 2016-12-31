@@ -13,7 +13,7 @@ public class Note extends RealmObject {
     private String note;
     private long created_date;
     private long last_edit;
-    private String makul_hari_id;
+    private String makul_id;
     private boolean arsip;
 
 
@@ -57,12 +57,12 @@ public class Note extends RealmObject {
         this.last_edit = last_edit;
     }
 
-    public String getMakul_hari_id() {
-        return makul_hari_id;
+    public String getMakul_id() {
+        return makul_id;
     }
 
-    public void setMakul_hari_id(String makul_hari_id) {
-        this.makul_hari_id = makul_hari_id;
+    public void setMakul_id(String makul_id) {
+        this.makul_id = makul_id;
     }
 
     public boolean isArsip() {
